@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Fly in text</title>
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+<style>
+    .container {
+        border:0px; padding: 0px; margin: 0px; scrollbar-width: 0px;
+        /*background-color: rgb(0, 255, 0);*/
+    }
+
+    @keyframes fly-in-from-right {
+        0%   { left:1940px;}
+        100%  { left:310px;}
+    }
+
+    @keyframes fly-in-from-left {
+        0%   { left:-650px;}
+        100%  { left:10px; }
+    }
+
+    #campus-box {
+        width: 350px;
+        height: 40px;
+        transform: skew(-20deg);
+        position: absolute;
+        left:40px;
+        top:20px;
+        box-shadow: 5px 5px 5px black;
+        background-color: black;
+        z-index: 7;
+    }
+
+    #campus {
+        font-family: "open sans", Roboto, "segoe ui", Arial;
+        font-size: 20px;
+        color: white;
+        left: 65px;
+        top: -2px;
+        position: absolute;
+        transform: skew(20deg);
+      
+    }
+
+    #name-box {
+        width: 550px;
+        height: 60px;
+        transform: skew(-20deg);
+        background: brown;
+        position: absolute;
+        left:40px;
+        top:45px;
+        box-shadow: 5px 5px 5px black;
+        background-image: linear-gradient(darkgrey,rgb(141,141,141), rgb(141,141,141),rgb(141,141,141),rgb(141,141,141),rgb(141,141,141),rgb(141,141,141), darkgrey);
+        z-index: 9;
+    }
+
+    #name {
+        font-size: 44px;
+        padding-left: 80px;
+        font-family: "open sans", Roboto, "segoe ui", Arial;
+        color: linen;
+        transform: skew(20deg);
+        position: absolute;
+        top: -5px;
+    }
+
+    #title-box {
+        width: 300px;
+        height: 60px;
+        color: black;
+        text-align: right;
+        transform: skew(-20deg);
+        background: linen;
+        position: absolute;
+        left:1920px;
+        top:80px;
+        box-shadow: 5px 5px 5px black;
+        z-index: 8;
+        
+    }
+
+    #title {
+        bottom: 0px;
+        padding-left: 10px;
+        font-size:25px;
+        font-family: "open sans", Roboto, "segoe ui", Arial;
+        position: absolute;
+        transform: skew(20deg);
+       
+    }
+
+    #logo {
+        width: 150px;
+        height: 100px;
+        left: -25px;
+        top: 20px;
+        clip-path: circle();
+        background-image: url("logo.png");
+        background-position: center;
+        background-size: 100px;
+        position: absolute;
+        z-index: 10;
+    }
+
+    #fromLeft {
+        left: -650px;
+        top:0px;
+        position: absolute;
+    }
+
+    #person-container {
+        top:900px;
+        margin: 0px;
+        padding: 0px;
+        height: 180px;
+        width: 1920px;
+        position: absolute;
+        overflow-x: hidden;
+    }
+
+    .enter-from-left{
+        animation: fly-in-from-left 2s 1;
+        animation-fill-mode: forwards;
+    }
+
+    .leave-from-left{
+        animation: fly-in-from-left 1s 1 reverse;
+        animation-fill-mode: forwards;
+    }
+
+    .enter-from-right{
+        animation: fly-in-from-right 2s 1;
+        animation-fill-mode: forwards;
+    }
+
+    .leave-from-right{
+        animation: fly-in-from-right 1s 1 reverse;
+        animation-fill-mode: forwards;
+    }
+
+</style>
+
+
+</head>
+<body class="container" id="container">
+    <div id="person-container">
+        <div id="fromLeft">
+            <div id="campus-box"><div id="campus"></div></div>
+            <div id="name-box"><div id="name"></div></div>
+            <div id="logo"></div>
+        </div>
+        <div id="title-box"><div id="title"></div></div>
+    </div>
+</body>
+<script lang="javascript">
+    function animate(id){
+        var elm = document.getElementById(id);
+        var newone = elm.cloneNode(true);
+        elm.parentNode.replaceChild(newone, elm);
+    }
+
+    function reanimate(){
+        animate("title-box");
+        animate("fromLeft");
+    }
+
+    function show(){
+        var el = document.getElementById("fromLeft");
+        el.setAttribute("class","enter-from-left")
+        var el2 = document.getElementById("title-box");
+        el2.setAttribute("class","enter-from-right")
+        reanimate();
+        setTimeout(function(){ hide() }, 5000);
+    }
+
+    function hide(){
+        var el = document.getElementById("fromLeft");
+        el.setAttribute("class","leave-from-left")
+        var el2 = document.getElementById("title-box");
+        el2.setAttribute("class","leave-from-right")
+        reanimate();
+    }
+
+    var data;
+    function getData(){
+        $.getJSON("display",function(result){
+            if (!data || data.displayCounter != result.displayCounter){
+                data = result;
+                $('#name')[0].innerHTML=result.name;
+                $('#title')[0].innerHTML=result.title;
+                show();
+            }
+        });
+    };
+
+    $( document ).ready(function() {
+        setInterval(function(){ getData(); }, 500);
+        $.getJSON("campus",function(result){
+                $('#campus')[0].innerHTML=result.campus;
+                var el = document.getElementById("container");
+                el.style.backgroundColor = result.chroma;
+            });
+    });
+
+</script>
+</html>
