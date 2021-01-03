@@ -104,6 +104,21 @@
         z-index: 10;
     }
 
+    #brandmark {
+        background-image: url("brand.png");
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: 300px;
+        height: 100px;
+        width: 300px;
+        position: absolute;
+        top:5px;
+        left:5px;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
     #fromLeft {
         left: -650px;
         top:0px;
@@ -145,6 +160,7 @@
 
 </head>
 <body class="container" id="container">
+    <div id="brandmark"></div>
     <div id="person-container">
         <div id="fromLeft">
             <div id="campus-box"><div id="campus"></div></div>
@@ -201,6 +217,11 @@
                 $('#campus')[0].innerHTML=result.campus;
                 var el = document.getElementById("container");
                 el.style.backgroundColor = result.chroma;
+
+                if (!result.brandMark){
+                    var el = document.getElementById("brandmark");
+                    el.style.display = 'none';
+                }
             });
     });
 

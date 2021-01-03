@@ -31,6 +31,14 @@ app.get('/logo.png',(req,res)=>{
     })
 })
 
+app.get('/brand.png',(req,res)=>{
+    fs.readFile('brand.png', function(err, data) {
+        res.writeHead(200, {'Content-Type': 'image/png'});
+        res.write(data);
+        return res.end();
+    })
+})
+
 
 app.get('/display',(req,res)=>{
     fs.readFile('./data/display.json', function(err, data) {
@@ -62,7 +70,7 @@ app.delete('/persons/:id',person_controller.remove_person);
 
 app.get('/campus',(req,res)=>{
     res.writeHead(202, {'Content-Type': 'text/plain'});
-    res.write('{"campus":"PARKVIEW","chroma":"rgb(0,255,0)"}');
+    res.write('{"campus":"PARKVIEW","chroma":"rgb(0,255,0)","brandMark":true}');
     return res.end();
 })
 
